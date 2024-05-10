@@ -1,4 +1,8 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
+from blog_app.models import Article
+from django.urls import reverse
+
 
 def home(request):
-    return render(request, 'home_app/index.html', context={})
+    articles = Article.objects.all()
+    return render(request, 'home_app/index.html', context={'articles': articles})
