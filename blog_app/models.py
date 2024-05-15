@@ -1,7 +1,8 @@
+from typing import Iterable
 from django.db import models
 from django.contrib.auth.models import User
 from django. urls import reverse
-
+from django.utils.text import slugify
 
 # manytoOne
 # manytoMany
@@ -18,16 +19,28 @@ class Category(models.Model):
 
 class Article(models.Model):
     auther = models.ForeignKey(User, models.CASCADE, )
-    category = models.ManyToManyField(Category)
+    category = models.ManyToManyField(Category, related_name='articles')
     title = models.CharField(max_length=70)
     body = models.TextField()
     image = models.ImageField(upload_to='images/article')
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
+    slug = models.SlugField(null=True, unique=True, blank=True)
+
+
+    # class Meta:
+    #     ordering = ('-updated','-created') baraye taiqr tartib
+        # verbose_name = taqir esm class Article
+        #  verbose_name_plural = taqir esm jam koli dakhel admin
+
+
+    def save(self, force_insert: bool = ..., force_update: bool = ..., using: str | None = ..., update_fields: Iterable[str] | None = ...) -> None:
+        self.slug = slugify(self.title)
+        super(Article, self).save()
 
 
     def get_absolute_url(self):
-        return reverse('blog_app:detail', args=[self.id])
+        return reverse('blog_app:detail', args=[self.slug])
     # or kwargs= 'pk': self.id
 
     def __str__(self):

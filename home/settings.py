@@ -41,6 +41,8 @@ INSTALLED_APPS = [
     'home_app',
     'accounts_app',
     'blog_app',
+    'django_render_partial',
+    'django_social_share',
 ]
 
 MIDDLEWARE = [
@@ -66,6 +68,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'home.context_processor.recent_article',
             ],
         },
     },
