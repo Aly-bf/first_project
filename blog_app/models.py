@@ -45,13 +45,23 @@ class Article(models.Model):
 
     def __str__(self):
         return f'{self.title} - {self.body[:30]}'
+    
+    class Meta:
+        ordering = ('created',)
 
 
 
-# class Detail(models.Model):
-#     auther = models.ForeignKey(User, models.CASCADE)
-#     title = models.CharField(max_length=20)
-#     body = models.TextField()
-#     image = models.ImageField(upload_to='images/detail')
-#     created = models.DateTimeField(auto_now_add=True)
-#     update = models.DateTimeField(auto_now=True)
+class Comment(models.Model):
+    article = models.ForeignKey(Article, on_delete=models.CASCADE, related_name='comments')
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='comments')
+
+    parent = models.ForeignKey('self', on_delete=models.CASCADE,null=True,blank=True, related_name='replies')
+
+    body = models.TextField()
+    created_at = models.DateTimeField(auto_now_add=True)
+
+
+    def __str__(self):
+        return self.body[:50]
+    
+    
