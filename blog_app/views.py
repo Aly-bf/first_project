@@ -27,3 +27,11 @@ def category_detail(request, pk=None):
     articles = category.articles.all()
     return render(request, 'blog_app/article_list.html', context={'articles': articles}) 
 
+def search(request):
+    q = request.GET.get('q')
+    articles = Article.objects.filter(title__icontains=q)
+    page_number = request.GET.get('page')
+    pageinator = Paginator(articles, 1)
+    objects_list = pageinator.get_page(page_number)
+
+    return render(request, 'blog_app/article_list.html', context={'articles': objects_list})
