@@ -5,7 +5,12 @@ from django.core.paginator import Paginator
 
 def post_detail(request, slug):
     article = get_object_or_404(Article, slug=slug)
-    return render(request, 'blog_app/article_details.html', context={'article': article})
+    comments = Comment.objects.filter(article=article)
+    if request.method == 'POST':
+        parent_id = request.POST.get('parent_id')
+        body = request.POST.get('body')
+        Comment.objects.create(body=body, article=article, user=request.user, parent_id=parent_id)
+    return render(request, 'blog_app/article_details.html', context={'article': article, "comments": comments})
 
 
 def article_list(request):
@@ -22,6 +27,3 @@ def category_detail(request, pk=None):
     articles = category.articles.all()
     return render(request, 'blog_app/article_list.html', context={'articles': articles}) 
 
-def comments(request):
-        article_comments = Comment.comments.all()
-        return render(request, 'blog_app/article_details.html', context={'article_comments': article_comments})
