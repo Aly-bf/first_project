@@ -65,3 +65,13 @@ class Comment(models.Model):
         return self.body[:50]
     
     
+class Message(models.Model):
+    title = models.CharField(max_length=100)
+    text = models.TextField()
+    age = models.IntegerField(default=0)
+    email = models.EmailField()
+    created_at = models.DateTimeField(auto_now_add=True, null=True)
+    
+
+    def __str__(self):
+        return self.title
